@@ -2,9 +2,9 @@
 
 ## Anggota
 Giast Ahmad - 140810220018 <br>
-Alif Al Husaini - 140810220036
-Muhamad Danendra Syah Hidayatullah - 140810220064
-Rio Irawan - 140810220084
+Alif Al Husaini - 140810220036 <br>
+Muhamad Danendra Syah Hidayatullah - 140810220064 <br>
+Rio Irawan - 140810220084 <br>
 Angga Prasetyo - 140810220086
 
 ## Dataset
