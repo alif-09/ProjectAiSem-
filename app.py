@@ -3,12 +3,21 @@ import cv2
 import base64
 import numpy as np
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode, RTCConfiguration
-from keras.models import load_model
+from streamlit_option_menu import option_menu
 
 # Konfigurasi WebRTC
 RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
 
 st.set_page_config(layout="wide")
+
+selected = option_menu(
+    menu_title=None,  
+    options=["Home", "Projects", "Contact"],  
+    icons=["house", "book", "envelope"], 
+    menu_icon="cast",
+    default_index=0, 
+    orientation="horizontal",
+)
 
 # Kelas untuk memproses frame video
 class VideoProcessor(VideoProcessorBase):
@@ -142,7 +151,7 @@ def load_html():
         <section class="intro">
             <h1>Traffic Sign Recognition</h1>
             <p>Welcome to our website, a center for traffic sign recognition. We utilize advanced AI technology to quickly and accurately identify and interpret various types and shapes of traffic signs. Our system is designed to learn and adapt to different types of traffic signs, allowing us to provide fast and precise information. To try our application, you can press the button below. Thank you.</p>
-            <button class="scroll-button" onclick="scrollToSection()">Try it now</button>
+            <button>Try it now</button>
         </section>
         <section id="traffic-signs">
             <div class="marquee">
@@ -159,38 +168,76 @@ def load_html():
             </div>
         </section>
     </div>
-    <script>
-        function scrollToSection() {{
-            document.getElementById('video_feed_section').scrollIntoView({{ behavior: 'smooth' }});
-        }}
-    </script>
     """
     # Menampilkan HTML dengan gambar
     st.markdown(html, unsafe_allow_html=True)
 
-# Memuat dan menampilkan custom CSS dan HTML
-load_css()
-load_html()
+# Layout untuk halaman Home
+if selected == "Home":
+    load_css()
+    load_html()
 
-# Layout untuk video feed dan hasil pengenalan
-st.markdown('<div id="video_feed_section" class="centered-content">', unsafe_allow_html=True)
+# Layout untuk halaman Projects
+if selected == "Projects":
+    st.markdown('<div id="video_feed_section" class="centered-content">', unsafe_allow_html=True)
 
-cols = st.columns([1, 2, 1])  # Kolom pertama dan ketiga untuk memberikan jarak, kolom kedua untuk konten
+    cols = st.columns([1, 2, 1])  # Kolom pertama dan ketiga untuk memberikan jarak, kolom kedua untuk konten
 
-with cols[1]:  # Mengatur agar konten berada di tengah
-    # st.columns(3)[1].header("hello world")
-    st.markdown("<h4 style='text-align: center; color: white;'>Recognition Test</h4>", unsafe_allow_html=True)
-    ctx = webrtc_streamer(key="example", mode=WebRtcMode.SENDRECV, rtc_configuration=RTC_CONFIGURATION, video_processor_factory=VideoProcessor)
-    if ctx.video_processor:
-        st.session_state.video_processor = ctx.video_processor
+    with cols[1]:  # Mengatur agar konten berada di tengah
+        st.markdown("<h4 style='text-align: center; color: white;'>Recognition Test</h4>", unsafe_allow_html=True)
+        
+        # Dropdown untuk memilih jenis inputan data
+        input_type = st.selectbox("Pilih jenis input:", ["Camera", "File/Gambar"])
+        
+        if input_type == "Camera":
+            ctx = webrtc_streamer(key="example", mode=WebRtcMode.SENDRECV, rtc_configuration=RTC_CONFIGURATION, video_processor_factory=VideoProcessor)
+            if ctx.video_processor:
+                st.session_state.video_processor = ctx.video_processor
+        elif input_type == "File/Gambar":
+            uploaded_file = st.file_uploader("Upload gambar", type=["jpg", "jpeg", "png"])
+            if uploaded_file is not None:
+                file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+                img = cv2.imdecode(file_bytes, 1)
+                st.image(img, channels="BGR")
+                
+                # Logika pengenalan rambu lalu lintas pada gambar
+                st.session_state.video_processor = VideoProcessor()
+                st.session_state.video_processor.result_text = "Example Sign"  # Ganti dengan hasil pengenalan sebenarnya
+                st.session_state.video_processor.description = "This is an example description for the recognized traffic sign."  # Ganti dengan deskripsi rambu sebenarnya
 
-    st.markdown("<h4 style='text-align: center; color: white;'>Recognition Results</h4>", unsafe_allow_html=True)
-    if st.session_state.video_processor:
-        result = st.session_state.video_processor.get_result()
-        description = st.session_state.video_processor.get_description()
-        st.write(f"**Nama Rambu:** {result}")
-        st.write(f"**Penjelasan:** {description}")
-    else:
-        st.write("Belum ada hasil pengenalan")
+        st.markdown("<h4 style='text-align: center; color: white;'>Recognition Results</h4>", unsafe_allow_html=True)
+        if st.session_state.video_processor:
+            result = st.session_state.video_processor.get_result()
+            description = st.session_state.video_processor.get_description()
+            st.write(f"**Nama Rambu:** {result}")
+            st.write(f"**Penjelasan:** {description}")
+        else:
+            st.write("Belum ada hasil pengenalan")
 
-st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# Layout untuk halaman Contact
+if selected == "Contact":
+    st.markdown("<h4 style='text-align: center; color: white;'>Contact Information</h4>", unsafe_allow_html=True)
+    st.markdown("<h6 style='text-align: center; color: white;'>Berikut adalah detail informasi dari kami selaku pembuat aplikasi ini</h6>", unsafe_allow_html=True)
+    
+    team_members = [
+        {"name": "Rio", "email": "rio22003@mail.unpad.ac.id", "image": "static/images/angga.png"},
+        {"name": "Angga", "email": "angga22004@mail.unpad.ac.id", "image": "static/images/angga.png"},
+        {"name": "Alif", "email": "alif22001@mail.unpad.ac.id", "image": "static/images/angga.png"},
+        {"name": "Giast", "email": "giast22001@mail.unpad.ac.id", "image": "static/images/angga.png"},
+        {"name": "Danendra", "email": "danen22001@mail.unpad.ac.id", "image": "static/images/angga.png"},
+    ]
+
+    cols = st.columns(len(team_members))
+
+    for i, member in enumerate(team_members):
+        image_base64 = img_to_base64(member["image"])
+        with cols[i]:
+            st.markdown(f"<div style='text-align: center'><img src='data:image/png;base64,{image_base64}' width='100'></div>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; margin: 0.5rem 0 '> {member['name']}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; margin: 0 '> {member['email']}</p>", unsafe_allow_html=True)
+
+
+
+
