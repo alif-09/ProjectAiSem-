@@ -7,7 +7,7 @@
 2. [Dataset](#dataset)
 3. [Model Training Using Yolov8](#model-training-using-yolov8)
 
-## Anggota
+## Team
 - Giast Ahmad - 140810220018
 - Alif Al Husaini - 140810220036
 - Muhamad Danendra Syah Hidayatullah - 140810220064
