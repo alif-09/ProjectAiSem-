@@ -1,7 +1,7 @@
 # Project Artificial Intelligence Semester 4
 
 ## Anggota
-Giast Ahmad - 140810220018
+Giast Ahmad - 140810220018 <br>
 Alif Al Husaini - 140810220036
 Muhamad Danendra Syah Hidayatullah - 140810220064
 Rio Irawan - 140810220084
