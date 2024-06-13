@@ -1,8 +1,7 @@
 streamlit
-ultralytics==8.0.196
-opencv-python-headless
+opencv-python
 numpy
 Pillow
+ultralytics==8.0.196
 streamlit-webrtc
 streamlit-option-menu
-pandas
