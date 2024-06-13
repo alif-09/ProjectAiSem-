@@ -5,4 +5,5 @@ Pillow
 ultralytics==8.0.196
 streamlit-webrtc
 streamlit-option-menu
-pandas
+torch
+torchvision
