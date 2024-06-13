@@ -3,19 +3,19 @@ from ultralytics import YOLO
 import cv2
 import base64
 import numpy as np
+from PIL import Image
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode, RTCConfiguration
 from streamlit_option_menu import option_menu
-import threading
 
 # Konfigurasi WebRTC
 RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
 
 st.set_page_config(
     layout="wide",
-    page_title="Traffuck"
+    page_title="Traffic Sign Recognition"
 )
 
-# model = YOLO('best10.pt')
+model = YOLO('Model/best10.pt')
 
 class_names = [
     "Speed limit (20km/h)", "Speed limit (30km/h)", "Speed limit (50km/h)", "Speed limit (60km/h)",
@@ -49,12 +49,21 @@ class VideoProcessor(VideoProcessorBase):
         img = frame.to_ndarray(format="bgr24")
         
         # Logika pengenalan rambu lalu lintas
-        self.result_text = "Example Sign"  # Ganti dengan hasil pengenalan sebenarnya
-        self.description = "This is an example description for the recognized traffic sign."  # Ganti dengan deskripsi rambu sebenarnya
+        results = model(img)
+        for result in results:
+            boxes = result.boxes
+            for box in boxes:
+                x1, y1, x2, y2 = map(int, box.xyxy[0])
+                conf = box.conf[0]
+                cls = int(box.cls[0])
 
-        # Menampilkan hasil pada frame video
-        cv2.putText(img, self.result_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-        
+                label = f'{class_names[cls]}: {conf:.2f}'
+
+                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                self.result_text = label
+                self.description = f'This sign indicates {class_names[cls].lower()}.'
+
         return frame.from_ndarray(img, format="bgr24")
 
     def get_result(self):
@@ -214,6 +223,7 @@ if selected == "Projects":
             if ctx.video_processor:
                 st.session_state.video_processor = ctx.video_processor
         elif input_type == "File/Gambar":
+            st.session_state.video_processor = None
             uploaded_file = st.file_uploader("Upload gambar", type=["jpg", "jpeg", "png"])
             if uploaded_file is not None:
                 file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
@@ -221,9 +231,26 @@ if selected == "Projects":
                 st.image(img, channels="BGR")
                 
                 # Logika pengenalan rambu lalu lintas pada gambar
-                st.session_state.video_processor = VideoProcessor()
-                st.session_state.video_processor.result_text = "Example Sign"  # Ganti dengan hasil pengenalan sebenarnya
-                st.session_state.video_processor.description = "This is an example description for the recognized traffic sign."  # Ganti dengan deskripsi rambu sebenarnya
+                results = model(img)
+                label = ""
+                description = ""
+                for result in results:
+                    boxes = result.boxes
+                    for box in boxes:
+                        x1, y1, x2, y2 = map(int, box.xyxy[0])
+                        conf = box.conf[0]
+                        cls = int(box.cls[0])
+
+                        label = f'{class_names[cls]}: {conf:.2f}'
+                        description = f'This sign indicates {class_names[cls].lower()}.'
+
+                        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                        cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                st.image(img, channels="BGR")
+                
+                if label:
+                    st.write(f"Detected Traffic Sign: {label}")
+                    st.write(f"Description: {description}")
 
         st.markdown("<h4 style='text-align: center; color: white;'>Recognition Results</h4>", unsafe_allow_html=True)
         if st.session_state.video_processor:
@@ -231,8 +258,8 @@ if selected == "Projects":
             description = st.session_state.video_processor.get_description()
             st.write(f"**Nama Rambu:** {result}")
             st.write(f"**Penjelasan:** {description}")
-        else:
-            st.write("Belum ada hasil pengenalan")
+        elif input_type == "File/Gambar" and uploaded_file is None:
+            st.write("Please upload an image to see the recognition results.")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -257,7 +284,3 @@ if selected == "Contact":
             st.markdown(f"<div style='text-align: center'><img src='data:image/png;base64,{image_base64}' width='100'></div>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center; margin: 0.5rem 0 '> {member['name']}</p>", unsafe_allow_html=True)
             st.markdown(f"<p style='text-align: center; margin: 0 '> {member['email']}</p>", unsafe_allow_html=True)
-
-
-
-
