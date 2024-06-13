@@ -16,6 +16,9 @@ Teknik Informatika Universitas Padjadjaran Angkatan 2022
         - [Confusion Matrix Sebelum Normalisasi](#confusion-matrix-sebelum-normalisasi)
         - [Confusion Matrix Setelah Normalisasi](#confusion-matrix-setelah-normalisasi)
     - [Deploy ke Streamlit](#deploy-ke-streamlit)
+        - [Tampilan Website | Home](#tampilan-website--home)
+        - [Tampilan Website | Project](#tampilan-website--project)
+        - [Tampilan Website | Contacts](#tampilan-website--contacts)
 4. [Pelatihan Model Menggunakan YOLOv8](#pelatihan-model-menggunakan-yolov8)
 
 ## Tim
@@ -181,6 +184,16 @@ Hasil pelatihan dapat dilihat pada file [results.csv](https://github.com/alif-09
 ![Confusion Matrix Setelah Normalisasi](Model/train_40epoch_2/confusion_matrix_normalized.png)
 
 ### Deploy ke Streamlit
+Kunjungi [TrafficsScogg](https://trafficscogg.streamlit.app/).
+
+#### Tampilan Website | Home
+![Tampilan Website | Home](static/images/streamlit1.png)
+
+#### Tampilan Website | Project
+![Tampilan Web | Project](static/images/streamlit2.png)
+
+#### Tampilan Website | Contacts
+![Tampilan Web | Contacts](static/images/streamlit3.png)
 
 ## Pelatihan Model Menggunakan YOLOv8
 Kode untuk pelatihan model dapat diakses di: [Notebook on Kaggle](https://www.kaggle.com/code/zhelox/notebook9064ded284/edit)
