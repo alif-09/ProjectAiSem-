@@ -7,3 +7,4 @@ streamlit-webrtc
 streamlit-option-menu
 torch
 torchvision
+dill
