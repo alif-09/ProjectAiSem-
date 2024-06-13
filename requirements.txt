@@ -1,7 +1,7 @@
-streamlit==1.26.0
+streamlit
 opencv-python-headless
 numpy
-ultralystics==8.0.196
+ultralytics
 streamlit-webrtc
 streamlit-option-menu
 torch
