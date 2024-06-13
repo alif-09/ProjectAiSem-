@@ -15,7 +15,7 @@ st.set_page_config(
     page_title="TrafficScott"
 )
 
-model = YOLO('Model/best10.pt')
+model = YOLO('Model/train_40epoch_2/weights/best.pt')
 
 class_names = [
     "Speed limit (20km/h)", "Speed limit (30km/h)", "Speed limit (50km/h)", "Speed limit (60km/h)",
