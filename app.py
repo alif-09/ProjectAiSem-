@@ -7,7 +7,6 @@ from PIL import Image
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode, RTCConfiguration
 from streamlit_option_menu import option_menu
 
-# Konfigurasi WebRTC
 RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
 
 st.set_page_config(
@@ -86,6 +85,8 @@ selected = option_menu(
 )
 
 # Kelas untuk memproses frame video
+THRESHOLD = 0.5  # Definisikan threshold yang diinginkan di sini
+
 class VideoProcessor(VideoProcessorBase):
     def __init__(self):
         self.result_text = "Click result button to see the result."
@@ -103,12 +104,14 @@ class VideoProcessor(VideoProcessorBase):
                 conf = box.conf[0]
                 cls = int(box.cls[0])
 
-                label = f'{class_names[cls]}: {conf:.2f}'
+                # Cek apakah confidence melebihi threshold
+                if conf > THRESHOLD:
+                    label = f'{class_names[cls]}: {conf:.2f}'
 
-                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                self.result_text = label
-                self.description = f'This sign indicates {class_names[cls].lower()}.'
+                    cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                    cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    self.result_text = label
+                    self.description = f'This sign indicates {class_names[cls].lower()}.'
 
         return frame.from_ndarray(img, format="bgr24")
 
