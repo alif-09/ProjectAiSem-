@@ -12,7 +12,7 @@ RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.goog
 
 st.set_page_config(
     layout="wide",
-    page_title="TrafficScott"
+    page_title="TrafficScogg"
 )
 
 model = YOLO('Model/train_40epoch_2/weights/best.pt')
