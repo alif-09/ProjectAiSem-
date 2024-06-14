@@ -33,8 +33,6 @@ Dataset yang digunakan dalam proyek ini adalah [GTSRB - German Traffic Sign](htt
 
 ## Proses
 
-Untuk menjelaskan isi dari dataset versi 1 (314.36 MB) yang terdiri dari meta, Test.csv, dan Train.csv, berikut adalah penjelasan dalam bahasa Indonesia yang dapat ditambahkan pada bagian proses dan pengambilan dataset:
-
 ### Pengambilan Dataset
 Dataset yang digunakan dalam proyek ini adalah [GTSRB - German Traffic Sign](https://www.kaggle.com/datasets/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign).
 Ini Merupakan Benchmark Tanda Lalu Lintas Jerman pada klasifikasi gambar tunggal multi-kelas yang diadakan pada Konferensi Internasional Jaringan Saraf Tiruan (IJCNN) 2011. Benchmark ini memiliki sifat-sifat berikut:
