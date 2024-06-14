@@ -1,8 +1,10 @@
-streamlit==1.26.0
-opencv-python-headless
+streamlit
+opencv-python
 numpy
-Pillow
-ultralytics==8.0.196
+ultralytics
 streamlit-webrtc
 streamlit-option-menu
-pandas
+torch
+torchvision
+dill
+cv
