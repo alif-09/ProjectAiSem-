@@ -202,6 +202,6 @@ Kunjungi [TrafficsScogg](https://trafficscogg.streamlit.app/).
 ![Tampilan Web | Contacts](static/images/streamlit3.png)
 
 ## Pelatihan Model Menggunakan YOLOv8
-Kode untuk pelatihan model dapat diakses di: [Notebook on Kaggle]([https://www.kaggle.com/code/zhelox/traffic-sign-v1])
+Kode untuk pelatihan model dapat diakses di: ![Notebook on Kaggle]([https://www.kaggle.com/code/zhelox/traffic-sign-v1])
 
 Kami menggunakan Kaggle karena CPU dan GPU kami tidak cukup kuat untuk melatih model secara lokal.
