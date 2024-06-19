@@ -16,6 +16,9 @@ Teknik Informatika Universitas Padjadjaran Angkatan 2022
         - [Confusion Matrix Sebelum Normalisasi](#confusion-matrix-sebelum-normalisasi)
         - [Confusion Matrix Setelah Normalisasi](#confusion-matrix-setelah-normalisasi)
     - [Deploy ke Streamlit](#deploy-ke-streamlit)
+        - [Tampilan Website | Home](#tampilan-website--home)
+        - [Tampilan Website | Project](#tampilan-website--project)
+        - [Tampilan Website | Contacts](#tampilan-website--contacts)
 4. [Pelatihan Model Menggunakan YOLOv8](#pelatihan-model-menggunakan-yolov8)
 
 ## Tim
@@ -30,9 +33,14 @@ Dataset yang digunakan dalam proyek ini adalah [GTSRB - German Traffic Sign](htt
 
 ## Proses
 
-Untuk menjelaskan isi dari dataset versi 1 (314.36 MB) yang terdiri dari meta, Test.csv, dan Train.csv, berikut adalah penjelasan dalam bahasa Indonesia yang dapat ditambahkan pada bagian proses dan pengambilan dataset:
-
 ### Pengambilan Dataset
+Dataset yang digunakan dalam proyek ini adalah [GTSRB - German Traffic Sign](https://www.kaggle.com/datasets/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign).
+Ini Merupakan Benchmark Tanda Lalu Lintas Jerman pada klasifikasi gambar tunggal multi-kelas yang diadakan pada Konferensi Internasional Jaringan Saraf Tiruan (IJCNN) 2011. Benchmark ini memiliki sifat-sifat berikut:
+Masalah klasifikasi multi-kelas pada gambar tunggal
+Lebih dari 40 kelas
+Lebih dari 50.000 gambar secara total
+Basis data yang besar dan realistis
+
 Dataset Version 1 (314.36 MB) terdiri dari beberapa komponen utama:
 
 #### Meta
@@ -64,7 +72,7 @@ Contoh Anotasi:
 ![Contoh Anotasi](Model/train_40epoch_2/train_batch0.jpg) 
 
 Anotasi gambar bisa dilakukan melalui Roboflow, tetapi karena pada dataset kami sudah memiliki data Width, Height, Roi.X1, Roi.Y1, Roi.X2, Roi.Y2, ClassId, dan Path, kita bisa melakukan konversi secara manual menggunakan kode berikut:
-python
+```python
 import os
 import pandas as pd
 from shutil import copy2
@@ -123,19 +131,20 @@ output_test_labels_dir = 'datasets/val/labels'
 
 process_csv(train_csv_path, images_root_dir, output_train_images_dir, output_train_labels_dir)
 process_csv(test_csv_path, images_root_dir, output_test_images_dir, output_test_labels_dir)
+```
 
 
 ### Instalasi Dependensi
 Instalasi ultralytics untuk YOLOv8:
 
-sh
+```python
 !pip install ultralytics==8.0.196
-
+```
 
 ### Persiapan Model
 Setelah anotasi selesai, buat file data.yaml yang mendefinisikan lokasi dataset dan jumlah kelas. Contoh file data.yaml:
 
-yaml
+```yaml
 train: /kaggle/working/datasets/train/images
 val: /kaggle/working/datasets/val/images
 
@@ -147,12 +156,12 @@ names: [
   'class_30', 'class_31', 'class_32', 'class_33', 'class_34', 'class_35', 'class_36', 'class_37', 'class_38', 'class_39',
   'class_40', 'class_41', 'class_42'
 ]
-
+```
 
 ### Pelatihan Model
 Gunakan kode berikut untuk melatih model YOLOv8:
 
-python
+```python
 from ultralytics import YOLO
 
 data_path = '/kaggle/input/data-yaml/data.yaml'
@@ -169,7 +178,7 @@ model.train(
     flipud=0.0,    # Hindari flipping vertikal (mirroring)
     degrees=0.0,   # Hindari rotasi
 )
-
+```
 
 ### Hasil Pelatihan
 Hasil pelatihan dapat dilihat pada file [results.csv](https://github.com/alif-09/ProjectAiSem4/blob/main/Model/train_40epoch_2/results.csv). File ini berisi detail metrik dan statistik dari pelatihan model.
@@ -181,8 +190,18 @@ Hasil pelatihan dapat dilihat pada file [results.csv](https://github.com/alif-09
 ![Confusion Matrix Setelah Normalisasi](Model/train_40epoch_2/confusion_matrix_normalized.png)
 
 ### Deploy ke Streamlit
+Kunjungi [TrafficsScogg](https://trafficscogg.streamlit.app/).
+
+#### Tampilan Website | Home
+![Tampilan Website | Home](static/images/streamlit1.png)
+
+#### Tampilan Website | Project
+![Tampilan Web | Project](static/images/streamlit2.png)
+
+#### Tampilan Website | Contacts
+![Tampilan Web | Contacts](static/images/streamlit3.png)
 
 ## Pelatihan Model Menggunakan YOLOv8
-Kode untuk pelatihan model dapat diakses di: [Notebook on Kaggle](https://www.kaggle.com/code/zhelox/notebook9064ded284/edit)
+Kode untuk pelatihan model dapat diakses di: [Notebook on Kaggle](https://www.kaggle.com/code/zhelox/traffic-sign-v1)
 
 Kami menggunakan Kaggle karena CPU dan GPU kami tidak cukup kuat untuk melatih model secara lokal.
